@@ -5,6 +5,7 @@ import React from "react";
 import axios from 'axios';
 import './App.css';
 import Modal from './Modal';
+import Cat from "./Cat";
 
 
 export const DiaryContext = createContext()
@@ -92,59 +93,63 @@ function App() {
 
   return (
   
-    <div className="App"> 
+    <div className="App bg-blue-500 m-4">
+
+      <Cat />
+          {/* <ul className="todos">
+            {diarys.map((item, index) => {
+              return (
+                <li key={index}>{item.content}</li>
+              );
+            })}
+          </ul> */}
+  
+          {/* 前までの知識で書いた実装↓ */}
+          {/* <div className="white">
+             <li className="whi2">
+            <TodoList diarys = {diarys} toggleTodo ={toggleTodo}/>
+            </li>
+            <li className="whi2">
+            <input type="text" ref={todoNameRef}/>
+            </li>
+              <li className="whi2">
+                <button onClick={handleAddTodo}>タスクを追加</button>
+              </li>
+              <li className="whi2">
+              <button onClick={handleClear}>完了したタスクの削除</button>
+              </li>
+              <li className="whi2">
+                残りのタスク:{diarys.filter((todo) => !todo.completed).length} 
+              </li> 
+          </div> */}
 
       {/* showが表示をつかさどる変数。コンポーネント内で書き換えを行っている。 */}
-      <Modal show={modal} title="My Modal" close={Toggle} />
+        <Modal show={modal} title="My Modal" close={Toggle} />
 
-      <div className="boxDiv">
-     
-        <div className = "boxDate bg-red-400">
+        
+        <div className="boxDiv bg-blue-500 flex border-purple-500 border-4">
+
+          <div className = "boxDate bg-yellow-400 border-5 border-purple-500 border-4">
+          </div>
+          
+          <div className = "boxul bg-green-500 flex border-purple-500 border-4">
+          
+              <div className ="boxli1 border-purple-500 border-4"></div>
+
+              <div className ="boxli2 border-purple-500 border-4">
+                  <div >
+                    <div className = "boxli3 border-purple-500 border-4"></div>
+                    <div className = "boxli3 border-purple-500 border-4"></div>
+                    <div className = "boxli3 border-purple-500 border-4"></div>
+                  </div>
+              </div>
+
+          </div>
 
         </div>
         
-        <ul className = "boxul">
-          <li className ="boxli1"></li>
-
-          <li className ="boxli2">
-            <ul>
-              <li className = "boxli3 bg-amber-500"></li>
-              <li className = "boxli3 bg-green-500"></li>
-              <li className = "boxli3 bg-green-500"></li>
-            </ul>
-          </li>
-          
-        </ul>
+    </div>
        
-        {/* <ul className="todos">
-          {diarys.map((item, index) => {
-            return (
-              <li key={index}>{item.content}</li>
-            );
-          })}
-        </ul> */}
-
-        {/* 前までの知識で書いた実装↓ */}
-        {/* <div className="white">
-           <li className="whi2">
-          <TodoList diarys = {diarys} toggleTodo ={toggleTodo}/>
-          </li>
-          <li className="whi2">
-          <input type="text" ref={todoNameRef}/>
-          </li>
-            <li className="whi2">
-              <button onClick={handleAddTodo}>タスクを追加</button>
-            </li>
-            <li className="whi2">
-            <button onClick={handleClear}>完了したタスクの削除</button>
-            </li>
-            <li className="whi2">
-              残りのタスク:{diarys.filter((todo) => !todo.completed).length} 
-            </li> 
-        </div> */}
-       
-      </div>  
-   </div>
    
     );  
 }
