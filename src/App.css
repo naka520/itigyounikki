@@ -27,11 +27,14 @@
 }
 
 .boxDiv{
-    width:100%;
+    width:70%;
+    height: 100px;
+    position:center;
 }
 
 .boxDate{
   width:20%;
+  height:100%;
 }
 
 .boxul{
@@ -41,7 +44,7 @@
 }
 
 .boxli1{
-  width:20%;
+  width:17%;
   height:100%;
 }
 
@@ -49,13 +52,6 @@
   width:80%;
   height:100%;  
 }
-
-.boxli3{
-  width:5%;
-  /* height:20%; */
-}
-
-
 
 .blue {
 	height: 700px;
