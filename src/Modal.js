@@ -14,7 +14,7 @@ const Modal = ({ show, close }) => {
 // });
 
 var date = new Date("yyyy-mm-dd");
-const [diaryDate, setdiaryDate] = useState('20221111');
+const [diaryDate, setdiaryDate] = useState('2022-11-12');
 const [content, setcontent] = useState('くそが！');
 const [name, setname] = useState('hoge');
 const [userId, setuserId] = useState('123456789');
@@ -39,9 +39,10 @@ async function postDiary(){
   console.log(userId)
 
   try {
-    var response = await axios.post("https://azuretutorial20221105000814.azurewebsites.net/api/TableClientOutput?code=N-gYWDvlotZGt_TfbnxhQ3nol0tEpW5efGWCn_7aGYCEAzFuG-Uxuw==", {
+    var response = await axios.post("https://func-itigyounikki.azurewebsites.net/api/TableClientOutput?code=z7VjRaBx-oiHZ7cQX9Fggkoe1PVUPr25m3VcXg8L-849AzFutXwpmA==", {
       "content": content,
       "name": name,
+      "imageUrl": "",
       "userId": userId,
       "diaryDate": diaryDate
     });

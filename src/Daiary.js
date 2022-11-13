@@ -1,10 +1,9 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import './App.js';
 
 const Daiary = (props) => {
-
-  // const [weather, setWeather] = useState({});
-  // const refFirstRef2 = useRef(true);
-
+  const [imageUrl, setImageUrl] = useState("")
   var WeekChars = [ "日", "月", "火", "水", "木", "金", "土" ];
   var dObj = new Date(props.diaryDate);
   var wDay = dObj.getDay();
@@ -18,28 +17,29 @@ const Daiary = (props) => {
   console.log(month)
   console.log(day)
 
-  // async function getWeather(){
-  //   if (refFirstRef2.current) {
-  //     refFirstRef2.current = false;
-  //     return;
-  //   }
-
-  //   try {
-  //     var response2 = await axios.get("https://weather.tsukumijima.net/api/forecast/city/400030");
-  //     console.log(response2.data);
-
-  //     setWeather(response2.data)
-  //     console.log(weather)
-      
-  //   }catch{
-  //     console.error("取れません～～＾＾")
-  //   }
-  // }
-
-  // useLayoutEffect(() => {
-  //   getWeather()
-  // },[])
-
+  useEffect(() => {
+    if(props.imageUrl !== "" || props.imageUrl != null){
+      setImageUrl(props.imageUrl)
+    }
+  },[])
+  
+  const getImage = async() => {
+    if(props.imageUrl === "" || props.imageUrl == null){
+      // const response = axios.post("https://converttexttoimage.azurewebsites.net/api/HttpTrigger1?",{
+      //   "content": props.content,
+      //   "userId": props.userId,
+      //   "diaryDate": "2022-11-12"
+      // })
+      // const data = response.data
+      // console.log(data)
+      // setImageUrl(data)
+      alert("実行されたよ")
+    }else {
+      alert("実行されなかったよ")
+    }
+    
+  }
+  
   return (
     <div className=" h-32 boxDiv mb-4  flex border-slate-300 rounded-md drop-shadow-lg mx-auto">
 
@@ -47,7 +47,12 @@ const Daiary = (props) => {
         <div className=''>{day +" / (" + WeekChars[wDay] + ")"}</div>
       </div>
       
-      <img className ="boximg border-slate-300 h-full bg-green-300 mx-1"  src="https://replicate.delivery/pbxt/1WOzwsHHje0HAa97roZxncFG2SX8EB7JWFhnfXveREc9ue8fB/out-0.png" />
+      <img 
+        alt={props.imageUrl}
+        className ="boximg border-slate-300 h-full bg-green-300 mx-1"  
+        src={props.imageUrl === "" || props.imageUrl == null ? `${process.env.PUBLIC_URL}/plus.jpg` : imageUrl} 
+        onClick={getImage}
+      />
       
       
       <div className ="boxright bg-white flex border-slate-300 h-full">
@@ -58,7 +63,7 @@ const Daiary = (props) => {
           </div>
 
           <div className="border-white border-2 p-2 w-5/6 underline boxcontent h-full">
-            おなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたいおなか痛い眠いコーヒー飲みたい
+            {props.content}
           </div>
       </div>
 
