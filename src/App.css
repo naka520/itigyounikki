@@ -82,7 +82,16 @@
   opacity: 0.65;
 }
 
+.GarallyImageWrapper{
+  height: 100vh;
+  width: 100vw;
+}
 
+.loading-wrapper{
+  height: 100vh;
+  width: 100vw;
+  background-color: black;
+}
 
 .App-link {
   color: #61dafb;
