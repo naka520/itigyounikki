@@ -1,22 +1,36 @@
-import TodoList from "./TodoList";
-import{createContext,useState,useRef, useEffect, useLayoutEffect,View} from "react";
-import { v4 as uuidv4 } from "uuid";
+import{createContext,useState,useRef, useLayoutEffect } from "react";
 import React from "react";
 import axios from 'axios';
 import './App.css';
 import Modal from './Modal';
-import Cat from "./Cat";
+import Daiary from './Daiary';
 
 
 export const DiaryContext = createContext()
 
 function App() {
-  
-  // const [diarys, setDiarys] = useState([{id: uuidv4(),name: "Todo1", completed: false }]);
   const [diarys, setDiarys] = useState([]);
   const [modal, setModal] = useState(false);
   const Toggle = () => setModal(!modal);
   const refFirstRef = useRef(true);
+  const [weather, setWeather] = useState("");
+  const refFirstRef2 = useRef(true);
+
+  async function getWeather(){
+    if (refFirstRef2.current) {
+      refFirstRef2.current = false;
+      return;
+    }
+
+    try {
+      const response = await axios.get("https://weather.tsukumijima.net/api/forecast/city/400030")
+      const data = response.data
+      setWeather(() => data["forecasts"][0]["telop"])
+      console.log(weather)
+    }catch{
+      console.error("取れません～～＾＾")
+    }
+  }
 
   async function getDiary(){
 
@@ -27,129 +41,63 @@ function App() {
     }
 
     try {
-      var response = await axios.get('https://azuretutorial20221105000814.azurewebsites.net/api/TableClientInput?code=mlstwRm607cu-B8qF7DrrEMBRmgs7oZ1zuItjISOoxfwAzFurTrkUQ==', {
+      const response = await axios.get('https://azuretutorial20221105000814.azurewebsites.net/api/TableClientInput?code=mlstwRm607cu-B8qF7DrrEMBRmgs7oZ1zuItjISOoxfwAzFurTrkUQ==', {
         params: {
           // ここにクエリパラメータを指定する
           userId: "123456789"
         }
       });
       console.log(response.data);
-
-      //取得したデータをオブジェクト毎に空配列にPush
-      // for(var i = 0 ; i < response.data.length ; ++i){
-      //   //本当はpushではなくsetDiarys()を使う必要がある。（データの反映が自動化されない）
-      //   // diarys.push(response.data[i]);
-      //   setDiarys(response.data[i]);
-      // }
       setDiarys(()=>[...response.data])
-      //console.log(diarys)
-
-      // console.log(diarys[0]); 
-      
-      
     }catch{
       console.error("取れません～～＾＾")
     }
-    // diarys.map((diary) => (
-    //   // <diary content={diary.content} />
-    //   console.log(diary)
-    // ));
   }
-
+  
   useLayoutEffect(() => {
     getDiary()
+    getWeather()
   },[])
 
-  const toggleTodo = (id) => {
-
-    const newTodos = [...diarys];
-    const todo = newTodos.find((todo) => todo.id === id);
-    todo.completed = !todo.completed;
-    setDiarys(newTodos);
-    //idでチェックボックスの管理
-    console.log("べんりだよー")
-    //コンソールはF12の画面でデバッグできるよー
-  };
- 
-  const todoNameRef = useRef();
-  const handleAddTodo = (e) =>{
-
-     const name = todoNameRef.current.value;
-     if(name === "")return;
-     setDiarys((prevTodos) => {
-
-      return [...prevTodos,{id: uuidv4(),name: name, completed:false }];
-      //...は三要素のオブジェクトが入る
-         });
-
-     todoNameRef.current.value = null;
-  };
-
-  const handleClear = () => {
-    // const newTodos = diarys.filter((todo) => !todo.completed);
-    // //既存の配列からしていされた条件に該当する要素を持つ配列を作成
-    // setDiarys(newTodos);
-  };
-
   return (
-  
-    <div className="App bg-blue-500 m-4">
-
-      <Cat />
-          {/* <ul className="todos">
-            {diarys.map((item, index) => {
-              return (
-                <li key={index}>{item.content}</li>
-              );
-            })}
-          </ul> */}
-  
-          {/* 前までの知識で書いた実装↓ */}
-          {/* <div className="white">
-             <li className="whi2">
-            <TodoList diarys = {diarys} toggleTodo ={toggleTodo}/>
-            </li>
-            <li className="whi2">
-            <input type="text" ref={todoNameRef}/>
-            </li>
-              <li className="whi2">
-                <button onClick={handleAddTodo}>タスクを追加</button>
-              </li>
-              <li className="whi2">
-              <button onClick={handleClear}>完了したタスクの削除</button>
-              </li>
-              <li className="whi2">
-                残りのタスク:{diarys.filter((todo) => !todo.completed).length} 
-              </li> 
-          </div> */}
+    <div className="App"> 
 
       {/* showが表示をつかさどる変数。コンポーネント内で書き換えを行っている。 */}
-        <Modal show={modal} title="My Modal" close={Toggle} />
-
-        
-        <div className="boxDiv bg-blue-500 flex border-purple-500 border-4">
-
-          <div className = "boxDate bg-yellow-400 border-5 border-purple-500 border-4">
-          </div>
-          
-          <div className = "boxul bg-green-500 flex border-purple-500 border-4">
-          
-              <div className ="boxli1 border-purple-500 border-4"></div>
-
-              <div className ="boxli2 border-purple-500 border-4">
-                  <div >
-                    <div className = "boxli3 border-purple-500 border-4"></div>
-                    <div className = "boxli3 border-purple-500 border-4"></div>
-                    <div className = "boxli3 border-purple-500 border-4"></div>
-                  </div>
-              </div>
-
-          </div>
-
+      <Modal show={modal} title="My Modal" close={Toggle} />       
+       <div className="border-white border-4">
+          {diarys.map((item, index) => {
+            return (
+                <Daiary key={index} weather={weather} imageUrl={item.imageUrl} diaryDate={item.diaryDate} userId={item.userId} content={item.content} />);
+          })}
         </div>
-        
-    </div>
        
+        {/* <ul className="todos">
+          {diarys.map((item, index ) => {
+            return (
+              <li key={index}>{item.content}</li>
+            );
+          })}
+        </ul> */}
+
+        {/* 前までの知識で書いた実装↓ */}
+        {/* <div className="white">
+           <li className="whi2">
+          <TodoList diarys = {diarys} toggleTodo ={toggleTodo}/>
+          </li>
+          <li className="whi2">
+          <input type="text" ref={todoNameRef}/>
+          </li>
+            <li className="whi2">
+              <button onClick={handleAddTodo}>タスクを追加</button>
+            </li>
+            <li className="whi2">
+            <button onClick={handleClear}>完了したタスクの削除</button>
+            </li>
+            <li className="whi2">
+              残りのタスク:{diarys.filter((todo) => !todo.completed).length} 
+            </li> 
+        </div> */}
+   </div>
    
     );  
 }
