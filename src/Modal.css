@@ -1,6 +1,6 @@
 .modal{
   box-sizing: border-box;
-  background-color: rgba(52, 89, 122, 0.479);
+  background-color: rgb(75, 125, 169);
   width: 1000px;
   text-align: center;
   padding: 100px;
@@ -10,7 +10,7 @@
 
 .list{
     box-sizing: border-box;
-    background-color: rgba(191, 202, 211, 0.479);
+    background-color: rgba(191, 202, 211, 1);
     width: 500px;
     text-align: left;
     padding: 50px;
@@ -21,7 +21,7 @@
 }
 .listmini{
     box-sizing: border-box;
-    background-color: rgba(191, 202, 211, 0.479);
+    background-color: rgba(191, 202, 211, 1);
     width: 300px;
     text-align: left;
     padding: 20px;

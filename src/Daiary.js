@@ -4,42 +4,53 @@ import './App.js';
 
 const Daiary = (props) => {
   const [imageUrl, setImageUrl] = useState("")
+  const [todayWeather, setTodayWeather] = useState("")
   var WeekChars = [ "日", "月", "火", "水", "木", "金", "土" ];
   var dObj = new Date(props.diaryDate);
+  console.log(dObj)
   var wDay = dObj.getDay();
   console.log("今日は、" + WeekChars[wDay] + "です。");
   
   var datelist = props.diaryDate.split('-');
   var year = datelist[0]
-  var month = datelist[1]
+  var month = datelist[1] === "12" ? "0" : datelist[1]
   var day = datelist[2]
   console.log(year)
   console.log(month)
   console.log(day)
 
   useEffect(() => {
+    // if(dObj.getDate() === day && dObj.getFullYear() === year && dObj.getMonth() === month){
+    //   setTodayWeather(props.weather)
+    // }else {
+    //   alert("実行されませんでした.")
+    // }
     if(props.imageUrl !== "" || props.imageUrl != null){
       setImageUrl(props.imageUrl)
     }
   },[])
-  
+
   const getImage = async() => {
     if(props.imageUrl === "" || props.imageUrl == null){
-      // const response = axios.post("https://converttexttoimage.azurewebsites.net/api/HttpTrigger1?",{
-      //   "content": props.content,
-      //   "userId": props.userId,
-      //   "diaryDate": "2022-11-12"
-      // })
-      // const data = response.data
-      // console.log(data)
-      // setImageUrl(data)
-      alert("実行されたよ")
-    }else {
-      alert("実行されなかったよ")
+      const response = await axios.post("https://converttexttoimage.azurewebsites.net/api/HttpTrigger1?",{
+        "content": props.content,
+        "userId": props.userId,
+        "diaryDate": props.diaryDate
+      })
+      const data = response.data
+      console.log(data)
+      setImageUrl(data)
+    }else{
+      alert("実行しません")
     }
-    
   }
-  
+
+  const handleModal = () => {
+    if((props.content == null || props.content === "") && !props.modal){
+      props.setModal(true)
+    }
+  }
+
   return (
     <div className=" h-32 boxDiv mb-4  flex border-slate-300 rounded-md drop-shadow-lg mx-auto">
 
@@ -62,8 +73,11 @@ const Daiary = (props) => {
             <div className = "bg-white border-2 p-2 h-1/3 w-full rounded-md"></div>
           </div>
 
-          <div className="border-white border-2 p-2 w-5/6 underline boxcontent h-full">
-            {props.content}
+          <div 
+            className="border-white border-2 p-2 w-5/6 underline boxcontent h-full"
+            onClick={handleModal}
+          >
+            {props.content == null || props.content === "" ? "+" : props.content}
           </div>
       </div>
 
