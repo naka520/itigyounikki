@@ -2,16 +2,17 @@ import "../index.css"
 import "../App.css"
 import { GarallyImage } from './GarallyImage'
 
+const MATLENGTH = 7
 
 function Garally() {
     const image_urls = [
-        "https://replicate.delivery/pbxt/1WOzwsHHje0HAa97roZxncFG2SX8EB7JWFhnfXveREc9ue8fB/out-0.png",
-        "https://replicate.delivery/pbxt/aQl23CetKIxgYi3oe4cbExToWd7zerfYdUjKaDVBlF79h98fB/out-0.png",
-        "https://replicate.delivery/pbxt/NLl3XgTmQcbAHJULFErnOggEQN5f0DEuPHFLBr1dEONgtnfPA/out-0.png",
-        "https://replicate.delivery/pbxt/LkxAkifImywiYCgk1TS435YlVFBY2YfbLvxDPkQ4OdeN2iefB/out-0.png",
-        "https://replicate.delivery/pbxt/Jrfbl5rJi92uUCQg8Z3Ze9ULjGDL9etj7zpuA4OaRjE4LjefB/out-0.png",
-        "https://replicate.delivery/pbxt/3dnl0AwQbNqhOp2uJblpOgljCOxCYmVLbBAP0vyObdI6m1fHA/out-0.png",
-        "https://replicate.delivery/pbxt/kfMjKyIW3mQfpU1cGOk1p8BBlcf3eSekdOiaiPuavWx1E46fD/out-0.png"
+        localStorage.getItem("imageUrl0"),
+        localStorage.getItem("imageUrl1"),
+        localStorage.getItem("imageUrl2"),
+        localStorage.getItem("imageUrl3"),
+        localStorage.getItem("imageUrl4") === null ? "https://replicate.delivery/pbxt/Jrfbl5rJi92uUCQg8Z3Ze9ULjGDL9etj7zpuA4OaRjE4LjefB/out-0.png": localStorage.getItem("imageUrl4"),
+        localStorage.getItem("imageUrl5") === null ? "https://replicate.delivery/pbxt/3dnl0AwQbNqhOp2uJblpOgljCOxCYmVLbBAP0vyObdI6m1fHA/out-0.png": localStorage.getItem("imageUrl5"),
+        localStorage.getItem("imageUrl6") === null ? "https://replicate.delivery/pbxt/kfMjKyIW3mQfpU1cGOk1p8BBlcf3eSekdOiaiPuavWx1E46fD/out-0.png": localStorage.getItem("imageUrl6")
     ]
     const images = [
         // Front

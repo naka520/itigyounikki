@@ -1,4 +1,4 @@
-import{createContext,useState,useRef, useLayoutEffect } from "react";
+import{createContext,useState,useRef, useLayoutEffect, useEffect } from "react";
 import React from "react";
 import axios from 'axios';
 import './App.css';
@@ -9,6 +9,7 @@ import Daiary from './Daiary';
 export const DiaryContext = createContext()
 
 function App() {
+  const [urls, setUrls] = useState([])
   const [diarys, setDiarys] = useState([]);
   const [modal, setModal] = useState(false);
   const Toggle = () => setModal(!modal);
@@ -41,7 +42,7 @@ function App() {
     }
 
     try {
-      const response = await axios.get('https://azuretutorial20221105000814.azurewebsites.net/api/TableClientInput?code=mlstwRm607cu-B8qF7DrrEMBRmgs7oZ1zuItjISOoxfwAzFurTrkUQ==', {
+      const response = await axios.get('https://func-itigyounikki.azurewebsites.net/api/TableClientInput?code=KiZGn9g0HaPz8pyVCS2sHDtH8ua2_NnVGowx7dS2WVc6AzFudHv_xA==', {
         params: {
           // ここにクエリパラメータを指定する
           userId: "123456789"
@@ -59,44 +60,36 @@ function App() {
     getWeather()
   },[])
 
+  const toGarally = () => {
+    for(let i = 0; i < diarys.length ; i++) {
+      localStorage.setItem(`imageUrl${i}`,diarys[i].imageUrl)
+    }
+    window.location.href = "/garally"
+  }
+
   return (
     <div className="App"> 
 
       {/* showが表示をつかさどる変数。コンポーネント内で書き換えを行っている。 */}
-      <Modal show={modal} title="My Modal" close={Toggle} />       
-       <div className="border-white border-4">
+      <Modal show={modal} title="My Modal" close={Toggle} setDiarys={setDiarys}/>       
+       <div className="border-white border-4 ">
           {diarys.map((item, index) => {
             return (
-                <Daiary key={index} weather={weather} imageUrl={item.imageUrl} diaryDate={item.diaryDate} userId={item.userId} content={item.content} />);
+                <Daiary 
+                  key={index} 
+                  weather={weather} 
+                  imageUrl={item.imageUrl} 
+                  diaryDate={item.diaryDate} 
+                  userId={item.userId} 
+                  content={item.content} 
+                  modal={modal}
+                  setModal={setModal}
+                  setDiarys={setDiarys}
+                />);
           })}
         </div>
-       
-        {/* <ul className="todos">
-          {diarys.map((item, index ) => {
-            return (
-              <li key={index}>{item.content}</li>
-            );
-          })}
-        </ul> */}
-
-        {/* 前までの知識で書いた実装↓ */}
-        {/* <div className="white">
-           <li className="whi2">
-          <TodoList diarys = {diarys} toggleTodo ={toggleTodo}/>
-          </li>
-          <li className="whi2">
-          <input type="text" ref={todoNameRef}/>
-          </li>
-            <li className="whi2">
-              <button onClick={handleAddTodo}>タスクを追加</button>
-            </li>
-            <li className="whi2">
-            <button onClick={handleClear}>完了したタスクの削除</button>
-            </li>
-            <li className="whi2">
-              残りのタスク:{diarys.filter((todo) => !todo.completed).length} 
-            </li> 
-        </div> */}
+      <button className="add-btn" onClick={() => setModal(true)}>日記を追加</button>
+      <button className="add-btn" onClick={toGarally}>ギャラリーへ</button>
    </div>
    
     );  

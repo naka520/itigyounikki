@@ -17,7 +17,27 @@
   }
 }
 
+.modal {
+  z-index: 100;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
+.add-btn {
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: 10px;
+}
+
+.modal-diary{
+  opacity: 0.4;
+}
+
+.non-modal{
+  opacity: 1;
+}
 
 .check
 {
