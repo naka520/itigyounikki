@@ -3,5 +3,6 @@
 @tailwind utilities;
 
 body {
-    font-family: "Yu Mincho" ;
-    }
+    /* font-family: "Hannari"; */
+    font-family: "Kokoro"
+}

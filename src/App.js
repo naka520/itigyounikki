@@ -7,19 +7,23 @@ import './App.css';
 import Modal from './Modal';
 import Daiary from './Daiary';
 import Cat from "./Cat";
+import Header from "./Header";
 
 
 export const DiaryContext = createContext()
 
 function App() {
   
-  // const [diarys, setDiarys] = useState([{id: uuidv4(),name: "Todo1", completed: false }]);
   const [diarys, setDiarys] = useState([]);
   const [modal, setModal] = useState(false);
+  const [year, setYear] = useState("");
+  const [month, setMonth] = useState("");
+  const [my, setMy] = useState("");
   const Toggle = () => setModal(!modal);
   const refFirstRef = useRef(true);
-  const [weather, setWeather] = useState("");
-  const refFirstRef2 = useRef(true);
+
+  // const [weather, setWeather] = useState("");
+  // const refFirstRef2 = useRef(true);
 
   // async function getWeather(){
   //   if (refFirstRef2.current) {
@@ -38,8 +42,13 @@ function App() {
   //     console.error("取れません～～＾＾")
   //   }
   // }
-
+  
   async function getDiary(){
+    // var diaryDate = new Date();
+    // var datelist = diaryDate.split('-');
+    // var my = datelist[0] +"-"+datelist[1];
+    // setMy(my);
+    // console.log()
 
     //2回表示を防いでいる。デプロイ時にエラー吐くかも～^^
     if (refFirstRef.current) {
@@ -61,31 +70,33 @@ function App() {
     }catch{
       console.error("取れません～～＾＾")
     }
+
+
   }
   
   useLayoutEffect(() => {
     getDiary()
   },[])
 
-  useEffect(() => {
-    async function getWeather(){
-      if (refFirstRef2.current) {
-        refFirstRef2.current = false;
-        return;
-      }
-      try {
-        await axios.get("https://weather.tsukumijima.net/api/forecast/city/400030")
-        .then(res => setWeather(() => res.data.forcasts[0].telop))
-        .catch(error => console.log(error));
+  // useEffect(() => {
+  //   async function getWeather(){
+  //     if (refFirstRef2.current) {
+  //       refFirstRef2.current = false;
+  //       return;
+  //     }
+  //     try {
+  //       await axios.get("https://weather.tsukumijima.net/api/forecast/city/400030")
+  //       .then(res => setWeather(() => res.data.forcasts[0].telop))
+  //       .catch(error => console.log(error));
         
-        console.log(weather)
+  //       console.log(weather)
         
-      }catch{
-        console.error("取れません～～＾＾")
-      }
-    }
-    getWeather()
-  },[])
+  //     }catch{
+  //       console.error("取れません～～＾＾")
+  //     }
+  //   }
+  //   getWeather()
+  // },[])
 
   const toggleTodo = (id) => {
 
@@ -125,44 +136,47 @@ function App() {
       {/* showが表示をつかさどる変数。コンポーネント内で書き換えを行っている。 */}
       <Modal show={modal} title="My Modal" close={Toggle} />
 
-      <Cat />
-       
-       <div className="border-white border-4">
-          {diarys.map((item, index) => {
-            return (
-                <Daiary key={index} weather={weather} diaryDate={item.diaryDate} content={item.content} />
-                // <Daiary key={index} weather={weather.forecast[0].telop} diaryDate={item.diaryDate} content={item.content} />
-            );
-          })}
-        </div>
-       
-        {/* <ul className="todos">
-          {diarys.map((item, index ) => {
-            return (
-              <li key={index}>{item.content}</li>
-            );
-          })}
-        </ul> */}
+      <Header />
 
-        {/* 前までの知識で書いた実装↓ */}
-        {/* <div className="white">
-           <li className="whi2">
-          <TodoList diarys = {diarys} toggleTodo ={toggleTodo}/>
+      <div className="bg-cyan-100 pt-7">
+
+        <input className="bg-cyan-100 ml-8" type="month" name="example"></input>
+
+        {diarys.map((item, index) => {
+          return (
+              <Daiary key={index} diaryDate={item.diaryDate} content={item.content} />
+              // <Daiary key={index} weather={weather.forecast[0].telop} diaryDate={item.diaryDate} content={item.content} />
+          );
+        })}
+      </div>
+      
+      {/* <ul className="todos">
+        {diarys.map((item, index ) => {
+          return (
+            <li key={index}>{item.content}</li>
+          );
+        })}
+      </ul> */}
+
+      {/* 前までの知識で書いた実装↓ */}
+      {/* <div className="white">
+          <li className="whi2">
+        <TodoList diarys = {diarys} toggleTodo ={toggleTodo}/>
+        </li>
+        <li className="whi2">
+        <input type="text" ref={todoNameRef}/>
+        </li>
+          <li className="whi2">
+            <button onClick={handleAddTodo}>タスクを追加</button>
           </li>
           <li className="whi2">
-          <input type="text" ref={todoNameRef}/>
+          <button onClick={handleClear}>完了したタスクの削除</button>
           </li>
-            <li className="whi2">
-              <button onClick={handleAddTodo}>タスクを追加</button>
-            </li>
-            <li className="whi2">
-            <button onClick={handleClear}>完了したタスクの削除</button>
-            </li>
-            <li className="whi2">
-              残りのタスク:{diarys.filter((todo) => !todo.completed).length} 
-            </li> 
-        </div> */}
-       
+          <li className="whi2">
+            残りのタスク:{diarys.filter((todo) => !todo.completed).length} 
+          </li> 
+      </div> */}
+      
      
    </div>
    
