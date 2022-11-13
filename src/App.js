@@ -18,6 +18,26 @@ function App() {
   const [modal, setModal] = useState(false);
   const Toggle = () => setModal(!modal);
   const refFirstRef = useRef(true);
+  const [weather, setWeather] = useState("");
+  const refFirstRef2 = useRef(true);
+
+  // async function getWeather(){
+  //   if (refFirstRef2.current) {
+  //     refFirstRef2.current = false;
+  //     return;
+  //   }
+
+  //   try {
+  //     await axios.get("https://weather.tsukumijima.net/api/forecast/city/400030")
+  //     .then(res => setWeather(res.data.forcasts[0].telop))
+  //     .catch(error => console.log(error));
+      
+  //     console.log(weather)
+      
+  //   }catch{
+  //     console.error("取れません～～＾＾")
+  //   }
+  // }
 
   async function getDiary(){
 
@@ -36,29 +56,35 @@ function App() {
       });
       console.log(response.data);
 
-      //取得したデータをオブジェクト毎に空配列にPush
-      // for(var i = 0 ; i < response.data.length ; ++i){
-      //   //本当はpushではなくsetDiarys()を使う必要がある。（データの反映が自動化されない）
-      //   // diarys.push(response.data[i]);
-      //   setDiarys(response.data[i]);
-      // }
       setDiarys(()=>[...response.data])
-      //console.log(diarys)
-
-      // console.log(diarys[0]); 
-      
       
     }catch{
       console.error("取れません～～＾＾")
     }
-    // diarys.map((diary) => (
-    //   // <diary content={diary.content} />
-    //   console.log(diary)
-    // ));
   }
-
+  
   useLayoutEffect(() => {
     getDiary()
+  },[])
+
+  useEffect(() => {
+    async function getWeather(){
+      if (refFirstRef2.current) {
+        refFirstRef2.current = false;
+        return;
+      }
+      try {
+        await axios.get("https://weather.tsukumijima.net/api/forecast/city/400030")
+        .then(res => setWeather(() => res.data.forcasts[0].telop))
+        .catch(error => console.log(error));
+        
+        console.log(weather)
+        
+      }catch{
+        console.error("取れません～～＾＾")
+      }
+    }
+    getWeather()
   },[])
 
   const toggleTodo = (id) => {
@@ -104,16 +130,14 @@ function App() {
        <div className="border-white border-4">
           {diarys.map((item, index) => {
             return (
-              <div>
-                <Daiary key={index} diaryDate={item.diaryDate} content={item.content} />
-                
-              </div>
+                <Daiary key={index} weather={weather} diaryDate={item.diaryDate} content={item.content} />
+                // <Daiary key={index} weather={weather.forecast[0].telop} diaryDate={item.diaryDate} content={item.content} />
             );
           })}
         </div>
        
         {/* <ul className="todos">
-          {diarys.map((item, index) => {
+          {diarys.map((item, index ) => {
             return (
               <li key={index}>{item.content}</li>
             );
