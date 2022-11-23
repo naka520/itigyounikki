@@ -2,11 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
 * {
     box-sizing: border-box;
 }
-
 
 #garally {
     width: 100vw;
@@ -25,6 +23,3 @@ body {
     user-select: none;
     font-family: "Yu Mincho";
 }
-
-
-
