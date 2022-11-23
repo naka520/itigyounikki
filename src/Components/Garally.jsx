@@ -2,7 +2,6 @@ import "../index.css"
 import "../App.css"
 import { GarallyImage } from './GarallyImage'
 
-
 function Garally() {
     const image_urls = [
         "https://replicate.delivery/pbxt/1WOzwsHHje0HAa97roZxncFG2SX8EB7JWFhnfXveREc9ue8fB/out-0.png",

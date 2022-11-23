@@ -1,23 +1,37 @@
-import TodoList from "./TodoList";
-import{createContext,useState,useRef, useEffect, useLayoutEffect,View} from "react";
-import { v4 as uuidv4 } from "uuid";
+import{createContext,useState,useRef, useLayoutEffect, useEffect } from "react";
 import React from "react";
 import axios from 'axios';
 import './App.css';
 import Modal from './Modal';
 import Daiary from './Daiary';
-import Cat from "./Cat";
 
 
 export const DiaryContext = createContext()
 
 function App() {
-  
-  // const [diarys, setDiarys] = useState([{id: uuidv4(),name: "Todo1", completed: false }]);
+  const [urls, setUrls] = useState([])
   const [diarys, setDiarys] = useState([]);
   const [modal, setModal] = useState(false);
   const Toggle = () => setModal(!modal);
   const refFirstRef = useRef(true);
+  const [weather, setWeather] = useState("");
+  const refFirstRef2 = useRef(true);
+
+  async function getWeather(){
+    if (refFirstRef2.current) {
+      refFirstRef2.current = false;
+      return;
+    }
+
+    try {
+      const response = await axios.get("https://weather.tsukumijima.net/api/forecast/city/400030")
+      const data = response.data
+      setWeather(() => data["forecasts"][0]["telop"])
+      console.log(weather)
+    }catch{
+      console.error("取れません～～＾＾")
+    }
+  }
 
   async function getDiary(){
 
@@ -28,118 +42,54 @@ function App() {
     }
 
     try {
-      var response = await axios.get('https://azuretutorial20221105000814.azurewebsites.net/api/TableClientInput?code=mlstwRm607cu-B8qF7DrrEMBRmgs7oZ1zuItjISOoxfwAzFurTrkUQ==', {
+      const response = await axios.get('https://func-itigyounikki.azurewebsites.net/api/TableClientInput?code=KiZGn9g0HaPz8pyVCS2sHDtH8ua2_NnVGowx7dS2WVc6AzFudHv_xA==', {
         params: {
           // ここにクエリパラメータを指定する
           userId: "123456789"
         }
       });
       console.log(response.data);
-
-      //取得したデータをオブジェクト毎に空配列にPush
-      // for(var i = 0 ; i < response.data.length ; ++i){
-      //   //本当はpushではなくsetDiarys()を使う必要がある。（データの反映が自動化されない）
-      //   // diarys.push(response.data[i]);
-      //   setDiarys(response.data[i]);
-      // }
       setDiarys(()=>[...response.data])
-      //console.log(diarys)
-
-      // console.log(diarys[0]); 
-      
-      
     }catch{
       console.error("取れません～～＾＾")
     }
-    // diarys.map((diary) => (
-    //   // <diary content={diary.content} />
-    //   console.log(diary)
-    // ));
   }
-
+  
   useLayoutEffect(() => {
     getDiary()
+    getWeather()
   },[])
 
-  const toggleTodo = (id) => {
-
-    const newTodos = [...diarys];
-    const todo = newTodos.find((todo) => todo.id === id);
-    todo.completed = !todo.completed;
-    setDiarys(newTodos);
-    //idでチェックボックスの管理
-    console.log("べんりだよー")
-    //コンソールはF12の画面でデバッグできるよー
-  };
- 
-  const todoNameRef = useRef();
-  const handleAddTodo = (e) =>{
-
-     const name = todoNameRef.current.value;
-     if(name === "")return;
-     setDiarys((prevTodos) => {
-
-      return [...prevTodos,{id: uuidv4(),name: name, completed:false }];
-      //...は三要素のオブジェクトが入る
-         });
-
-     todoNameRef.current.value = null;
-  };
-
-  const handleClear = () => {
-    // const newTodos = diarys.filter((todo) => !todo.completed);
-    // //既存の配列からしていされた条件に該当する要素を持つ配列を作成
-    // setDiarys(newTodos);
-  };
+  const toGarally = () => {
+    for(let i = 0; i < diarys.length ; i++) {
+      localStorage.setItem(`imageUrl${i}`,diarys[i].imageUrl)
+    }
+    window.location.href = "/garally"
+  }
 
   return (
-  
     <div className="App"> 
 
       {/* showが表示をつかさどる変数。コンポーネント内で書き換えを行っている。 */}
-      <Modal show={modal} title="My Modal" close={Toggle} />
-
-      <Cat />
-       
-       <div className="border-white border-4">
+      <Modal show={modal} title="My Modal" close={Toggle} setDiarys={setDiarys}/>       
+       <div className="border-white border-4 ">
           {diarys.map((item, index) => {
             return (
-              <div>
-                <Daiary key={index} diaryDate={item.diaryDate} content={item.content} />
-                
-              </div>
-            );
+                <Daiary 
+                  key={index} 
+                  weather={weather} 
+                  imageUrl={item.imageUrl} 
+                  diaryDate={item.diaryDate} 
+                  userId={item.userId} 
+                  content={item.content} 
+                  modal={modal}
+                  setModal={setModal}
+                  setDiarys={setDiarys}
+                />);
           })}
         </div>
-       
-        {/* <ul className="todos">
-          {diarys.map((item, index) => {
-            return (
-              <li key={index}>{item.content}</li>
-            );
-          })}
-        </ul> */}
-
-        {/* 前までの知識で書いた実装↓ */}
-        {/* <div className="white">
-           <li className="whi2">
-          <TodoList diarys = {diarys} toggleTodo ={toggleTodo}/>
-          </li>
-          <li className="whi2">
-          <input type="text" ref={todoNameRef}/>
-          </li>
-            <li className="whi2">
-              <button onClick={handleAddTodo}>タスクを追加</button>
-            </li>
-            <li className="whi2">
-            <button onClick={handleClear}>完了したタスクの削除</button>
-            </li>
-            <li className="whi2">
-              残りのタスク:{diarys.filter((todo) => !todo.completed).length} 
-            </li> 
-        </div> */}
-       
-     
+      <button className="add-btn" onClick={() => setModal(true)}>日記を追加</button>
+      <button className="add-btn" onClick={toGarally}>ギャラリーへ</button>
    </div>
    
     );  

@@ -17,7 +17,27 @@
   }
 }
 
+.modal {
+  z-index: 100;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
+.add-btn {
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: 10px;
+}
+
+.modal-diary{
+  opacity: 0.4;
+}
+
+.non-modal{
+  opacity: 1;
+}
 
 .check
 {
@@ -27,32 +47,37 @@
 }
 
 .boxDiv{
-    width:70%;
-    height: 100px;
+    width:80%;
+    /* height: 100px; */
     position:center;
     /* margin:10px; */
 
 }
 
 .boxDate{
-  width:20%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width:18%;
   height:100%;
 }
 
-.boxul{
-  width:80%;
-  height:100%;
-
-}
-
-.boxli1{
-  width:10%;
+.boximg{
+  transform: scale(0.95, 0.95);
+  /* width:auto; */
   height:100%;
 }
 
-.boxli2{
-  width:80%;
+.boxright{
+  width:82%;
   height:100%;  
+}
+
+.boxcontent{
+  display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	overflow: hidden;
 }
 
 .blue {

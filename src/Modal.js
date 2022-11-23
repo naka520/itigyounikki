@@ -3,7 +3,7 @@ import{ useContext,useState,useRef, useEffect} from "react";
 import axios from 'axios';
 import { AppDiary } from './App'
 
-const Modal = ({ show, close }) => {
+const Modal = ({ show, close , setDiarys}) => {
 
 
 //   const [text, setText] = useState({
@@ -14,34 +14,23 @@ const Modal = ({ show, close }) => {
 // });
 
 var date = new Date("yyyy-mm-dd");
-const [diaryDate, setdiaryDate] = useState('20221111');
+const [diaryDate, setdiaryDate] = useState('2022-11-12');
 const [content, setcontent] = useState('くそが！');
 const [name, setname] = useState('hoge');
 const [userId, setuserId] = useState('123456789');
 
 
-// whether: '',
-// content: 'dddd',
-// name: "hoge",
-// userId: "123456789",
-// diaryDate: '2022-11-09',
-
 async function postDiary(){
-  // {
-  //   "content": this.content,
-  //   "name": this.Name,
-  //   "userId": this.userId,
-  //   "diaryDate": this.diaryDate
-  // }
   console.log(diaryDate)
   console.log(content)
   console.log(name)
   console.log(userId)
 
   try {
-    var response = await axios.post("https://azuretutorial20221105000814.azurewebsites.net/api/TableClientOutput?code=N-gYWDvlotZGt_TfbnxhQ3nol0tEpW5efGWCn_7aGYCEAzFuG-Uxuw==", {
+    var response = await axios.post("https://func-itigyounikki.azurewebsites.net/api/TableClientOutput?code=z7VjRaBx-oiHZ7cQX9Fggkoe1PVUPr25m3VcXg8L-849AzFutXwpmA==", {
       "content": content,
       "name": name,
+      "imageUrl": "",
       "userId": userId,
       "diaryDate": diaryDate
     });
@@ -52,11 +41,18 @@ async function postDiary(){
   console.log(response);
 }
 
-const handleSubmit = () => {
+const handleSubmit = async() => {
   console.log(diaryDate);
   console.log(content);
 
   postDiary();
+  const response = await axios.get('https://func-itigyounikki.azurewebsites.net/api/TableClientInput?code=KiZGn9g0HaPz8pyVCS2sHDtH8ua2_NnVGowx7dS2WVc6AzFudHv_xA==', {
+    params: {
+      // ここにクエリパラメータを指定する
+      userId: "123456789"
+    }
+  });
+  setDiarys(() => [...response.data])
 }
 
     return (
@@ -66,11 +62,9 @@ const handleSubmit = () => {
        
        <>
           <div className="modal">
-         
-              {/* <h1> Modal </h1>
               <button className="close" onClick={() => close()}>
                x close
-              </button> */}
+              </button>
             <div onClick={(e) => e.stopPropagation()}>
 
             <div className ="list">
